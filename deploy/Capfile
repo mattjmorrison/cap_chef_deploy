@@ -1,0 +1,20 @@
+set :stages, %w(staging)
+set :default_stage, "staging"
+require 'capistrano/ext/multistage'
+
+load 'config/deploy'
+
+namespace :chef do
+
+	task :default, :roles => :web do
+		system "cd #{PROJECT_DIR} && tar czf #{PROJECT_DIR}/chef.tar.gz chef"
+		upload "#{PROJECT_DIR}/chef.tar.gz", "chef.tar.gz"
+		system "rm -rf #{PROJECT_DIR}/chef.tar.gz"
+
+		run "rm -rf ~/chef && tar xzf chef.tar.gz && rm -rf chef.tar.gz"
+		run "apt-get update && apt-get install -y build-essential ruby1.9.1 rubygems1.9.1 ruby1.9.1-dev"
+		run "gem install chef --no-rdoc --no-ri"
+		run "cd ~/chef && chef-solo --config solo.rb --json-attributes #{chef_node}.json && rm -rf ~/chef"
+	end
+
+end

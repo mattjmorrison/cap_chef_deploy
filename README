@@ -1,0 +1,9 @@
+Step 1:
+Create ssh key:
+
+ssh-keygen -t rsa
+[enter path-to-key]
+[enter passphrase]
+ssh-copy-id -i [path-to-key] user@host
+[enter user@host's password]
+

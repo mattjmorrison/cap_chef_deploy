@@ -1,0 +1,8 @@
+{
+	"run_list": [
+		"main"
+	],
+	"packages": [
+		"git-core"
+	]
+}
